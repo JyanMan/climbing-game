@@ -88,6 +88,7 @@ const update = (deltaTime) => {
     checkCollision();
     callForMovement();
     defineGravity();
+    player.update();
 
     //define the camera
     camera.pos.x = player.pos.x+(player.width/2) - (camera.width/2);
@@ -104,7 +105,6 @@ const callForMovement = () => {
     if (Math.abs(player.velocity.x) >= player.speed) {
         player.velocity.x = player.speed*Math.sign(player.velocity.x);
     }
-
 
     //jumping
     if (player.is_jumping === true && player.is_grounded) {
@@ -143,7 +143,6 @@ function checkCollision() {
         let ground = (isColliding(player, ground1)) ? ground1 : ground2;
         
         collisionReact(ground, player);
-
         
         if (!player.is_moving && player.is_grounded) {
             player.velocity.x = 0;
