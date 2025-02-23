@@ -80,61 +80,19 @@ const defineGravity = () => {
 }
 
 const update = (deltaTime) => {
-    //changes player velocity
-    player.pos.x += player.velocity.x*deltaTime;
-    player.pos.y += player.velocity.y*deltaTime;
-    //player.pos.y += player.velocity.y*deltaTime;
-
+    
+    player.update(deltaTime);
     checkCollision();
-    callForMovement();
-    defineGravity();
-    player.update();
+    //x movement with using keys a and d
+    if (!keys.a && !keys.d) {
+        player.is_moving = false;
+    }
+    //defineGravity();
 
     //define the camera
     camera.pos.x = player.pos.x+(player.width/2) - (camera.width/2);
     camera.pos.y = player.pos.y+(player.height/2) - (camera.height/2);
 
-}
-
-const callForMovement = () => {
-
-    //x movement with using keys a and d
-    if (!keys.a && !keys.d) {
-        player.is_moving = false;
-    }
-    if (Math.abs(player.velocity.x) >= player.speed) {
-        player.velocity.x = player.speed*Math.sign(player.velocity.x);
-    }
-
-    //jumping
-    if (player.is_jumping === true && player.is_grounded) {
-            
-        player.velocity.y = -player.jumpHeight;
-    }
-
-    //wall jumping
-    if (player.velocity.x === 0) {
-        player.wall_running = false;
-    }
-    if (player.wall_running) {
-        if (player.is_jumping && player.velocity.y > 0)
-            player.velocity.y = -player.jumpHeight;
-        else if (player.velocity.y >= 0)
-            player.velocity.y = 20;
-        player.velocity.x = 0;
-    }
-
-    //add dodge mechanic
-    if (player.is_dashing) {
-        dash();
-    }
-
-    //console.log(player.velocity.y, parseInt(player.pos.y));
-}
-
-const dash = () => {  
-    console.log("dashed");
-    player.is_dashing = false;
 }
 
 function checkCollision() {
@@ -152,7 +110,6 @@ function checkCollision() {
         player.wall_running = false;
         player.is_grounded = false;
     }
-    
 }
 
 let lastTime = Date.now();
